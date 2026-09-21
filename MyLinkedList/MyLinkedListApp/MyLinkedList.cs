@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Text;
 
 namespace MyLinkedListApp;
 
-public class MyLinkedList
+public class MyLinkedList : IEnumerable<Book>
 {
     #region Properties
 
@@ -24,6 +25,71 @@ public class MyLinkedList
         }
     }
 
+    #endregion
+    
+    #region Interface Implementation
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+    public IEnumerator<Book> GetEnumerator()
+    {
+        return new MyLinkedListEnumerator(Head);
+    }
+
+    
+
+    private class MyLinkedListEnumerator : IEnumerator<Book>
+    {
+        private readonly Node _head;
+        private bool _started;
+        private Node _current;
+        object IEnumerator.Current => Current;
+        public Book Current
+        {
+            get
+            {
+                if (_current == null)
+                {
+                    throw new ArgumentNullException(nameof(_current), "Invalid Parameter");
+                }
+                return _current.Data;
+            }
+        }
+
+        public MyLinkedListEnumerator(Node head)
+        {
+            _head = head;
+            _current = null;
+            _started = false;
+        }
+
+        public bool MoveNext()
+        {
+            if (!_started)
+            {
+                _current = _head;
+                _started = true;
+            }
+            else
+            {
+                _current = _current.Next;
+            }
+            return _current != null;
+        }
+
+        public void Reset()
+        {
+            _started = false;
+            _current = null;
+        }
+
+        public void Dispose()
+        {
+            //Nothing to clean up
+        }
+    }
     #endregion
 
     #region Insert Methods

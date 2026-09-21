@@ -34,10 +34,17 @@ class Program
                 Book book = new Book(title, author, isbn, publishDate, pages, price, genre);
                 
                 list.AddAtEnd(book);
+                
             }
         }
 
+        foreach (Book book in list)
+        {
+            Console.WriteLine(book);
+        }
+        
         Console.WriteLine(list);
+
         
     }
 }
